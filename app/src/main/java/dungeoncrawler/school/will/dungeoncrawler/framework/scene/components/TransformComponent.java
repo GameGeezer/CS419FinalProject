@@ -15,7 +15,7 @@ public class TransformComponent extends Entity.EntityComponent implements IUnifo
 
     private final MatrixUniform modelUniform = new MatrixUniform(MODEL_UNIFORM, MatrixUniform.MatrixUniformType.MATRIX4);
 
-    private Matrix4 position = new Matrix4(), scale = new Matrix4(), model = new Matrix4();
+    private Matrix4 dummy = new Matrix4(), model = new Matrix4();
 
     public static final String MODEL_UNIFORM = "u_modelMatrix";
 
@@ -81,19 +81,17 @@ public class TransformComponent extends Entity.EntityComponent implements IUnifo
 
     public void updateModelUniform() {
 
-        scale.data[Matrix4.M00] = transform.scale.x;
-        scale.data[Matrix4.M11] = transform.scale.y;
-        scale.data[Matrix4.M22] = transform.scale.z;
-
-        model.set(scale);
+        model.data[Matrix4.M00] = transform.scale.x;
+        model.data[Matrix4.M11] = transform.scale.y;
+        model.data[Matrix4.M22] = transform.scale.z;
 
         Matrix4.multiply(model, transform.orientation.computeMatrix(), model);
 
-        position.data[Matrix4.M03] = transform.position.x;
-        position.data[Matrix4.M13] = transform.position.y;
-        position.data[Matrix4.M23] = transform.position.z;
+        dummy.data[Matrix4.M03] = transform.position.x;
+        dummy.data[Matrix4.M13] = transform.position.y;
+        dummy.data[Matrix4.M23] = transform.position.z;
 
-        Matrix4.multiply(model, position, model);
+        Matrix4.multiply(model, dummy, model);
 
         modelUniform.setUniformData(model.data);
     }

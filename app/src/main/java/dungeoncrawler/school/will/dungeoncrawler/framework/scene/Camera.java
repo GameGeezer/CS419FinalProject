@@ -17,7 +17,7 @@ public class Camera implements IUniformWrapper {
     private final MatrixUniform projectionUniform = new MatrixUniform(PROJECTION_UNIFORM, MatrixUniform.MatrixUniformType.MATRIX4);
     private final MatrixUniform viewUniform = new MatrixUniform(VIEW_UNIFORM, MatrixUniform.MatrixUniformType.MATRIX4);
 
-    private final Matrix4 view = new Matrix4(), projection = new Matrix4(), position = new Matrix4(), scale = new Matrix4();
+    private final Matrix4 view = new Matrix4(), dummy = new Matrix4();
 
     public final Transform transform = new Transform();
 
@@ -58,32 +58,33 @@ public class Camera implements IUniformWrapper {
         float xScale = yScale / aspectRatio;
         float frustumLength = far - near;
 
-        projection.data[Matrix4.M00] = xScale;
-        projection.data[Matrix4.M11] = yScale;
-        projection.data[Matrix4.M22] = -((far + near) / frustumLength);
-        projection.data[Matrix4.M23] = -((2 * near * far) / frustumLength);
-        projection.data[Matrix4.M32] = -1;
-        projection.data[Matrix4.M33] = 0;
+        dummy.loadZero();
 
-        projectionUniform.setUniformData(projection.data);
+        dummy.data[Matrix4.M00] = xScale;
+        dummy.data[Matrix4.M11] = yScale;
+        dummy.data[Matrix4.M22] = -((far + near) / frustumLength);
+        dummy.data[Matrix4.M23] = -((2 * near * far) / frustumLength);
+        dummy.data[Matrix4.M32] = -1;
+        dummy.data[Matrix4.M33] = 0;
+
+        projectionUniform.setUniformData(dummy.data);
     }
 
     public void updateViewUniform() {
 
+        dummy.loadZero();
 
-        scale.data[Matrix4.M00] = transform.scale.x;
-        scale.data[Matrix4.M11] = transform.scale.y;
-        scale.data[Matrix4.M22] = transform.scale.z;
-
-        view.set(scale);
+        view.data[Matrix4.M00] = transform.scale.x;
+        view.data[Matrix4.M11] = transform.scale.y;
+        view.data[Matrix4.M22] = transform.scale.z;
 
         Matrix4.multiply(view, transform.orientation.computeMatrix(), view);
 
-        position.data[Matrix4.M03] = transform.position.x;
-        position.data[Matrix4.M13] = transform.position.y;
-        position.data[Matrix4.M23] = transform.position.z;
+        dummy.data[Matrix4.M03] = transform.position.x;
+        dummy.data[Matrix4.M13] = transform.position.y;
+        dummy.data[Matrix4.M23] = transform.position.z;
 
-        Matrix4.multiply(view, position, view);
+        Matrix4.multiply(view, dummy, view);
 
         viewUniform.setUniformData(view.data);
     }
