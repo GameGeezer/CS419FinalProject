@@ -1,0 +1,29 @@
+package dungeoncrawler.school.will.dungeoncrawler.framework.graphics.opengles.bufferObjects;
+
+import static android.opengl.GLES30.*;
+
+/**
+ * @author William Gervasio
+ */
+public enum AttachmentType {
+
+    DEPTH_ATTACHMENT(GL_DEPTH_ATTACHMENT),
+    STENCIL_ATTACHMENT(GL_STENCIL_ATTACHMENT),
+    COLOR_ATTACHMENT0(GL_COLOR_ATTACHMENT0),
+    COLOR_ATTACHMENT1(GL_COLOR_ATTACHMENT1),
+    COLOR_ATTACHMENT2(GL_COLOR_ATTACHMENT2),
+    COLOR_ATTACHMENT3(GL_COLOR_ATTACHMENT3),
+    COLOR_ATTACHMENT4(GL_COLOR_ATTACHMENT4),
+    COLOR_ATTACHMENT5(GL_COLOR_ATTACHMENT5),
+    COLOR_ATTACHMENT6(GL_COLOR_ATTACHMENT6),
+    COLOR_ATTACHMENT7(GL_COLOR_ATTACHMENT7),
+    COLOR_ATTACHMENT8(GL_COLOR_ATTACHMENT8),
+    COLOR_ATTACHMENT9(GL_COLOR_ATTACHMENT9);
+
+    public final int ID;
+
+    private AttachmentType(final int id) {
+
+        this.ID = id;
+    }
+}
